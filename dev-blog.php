@@ -5,6 +5,76 @@
  * @package WooCommerce\Admin
  */
 
+use Automattic\WooCommerce\Admin\Features\Navigation\Menu;
+use Automattic\WooCommerce\Admin\Features\Navigation\Screen;
+
+/**
+ * Register the navigation items in the WooCommerce navigation.
+ */
+function register_navigation_items() {
+	if (
+		! class_exists( '\Automattic\WooCommerce\Admin\Features\Navigation\Menu' ) ||
+		! class_exists( '\Automattic\WooCommerce\Admin\Features\Navigation\Screen' )
+	) {
+		return;
+	}
+
+	function page_content(){
+		echo '<div class="wrap"><h2>Testing</h2></div>';
+	}
+
+	add_menu_page( 'My Extension', 'My Extension', 'manage_woocommerce', 'my-extension-slug', 'page_content' );
+	
+
+	Menu::add_plugin_item(
+		array(
+			'id'         => 'my-extension',
+			'title'      => __( 'My Extension', 'my-extension' ),
+			'capability'    => 'manage_woocommerce',
+			'url'        => 'my-extension-slug',
+		)
+	);
+
+	Menu::add_plugin_category(
+		array(
+			'id'         => 'my-extension-category',
+			'title'      => __( 'My Extension Category', 'my-extension' ),
+			'parent' => 'woocommerce',
+		)
+	);
+
+	Menu::add_plugin_item(
+		array(
+			'id'         => 'my-extension-cat-page',
+			'title'      => __( 'My Extension Cat Page', 'my-extension' ),
+			'capability'    => 'manage_woocommerce',
+			'url'        => 'my-extension-slug-cat-page',
+			'parent' => 'my-extension-category',
+		)
+	);
+
+	register_post_type( 'my-post-type', array(
+		'label'        => 'My Post Type',
+		'public'       => true,
+		'show_in_menu' => true,
+	) );
+
+	Screen::register_post_type( 'my-post-type' );
+
+	$post_type_items = Menu::get_post_type_items(
+		'my-post-type',
+		array(
+			'title' => __( 'My Extension Post Type', 'my-extension' ),
+			'parent' => 'my-extension-category',
+		)
+	);
+
+	Menu::add_plugin_item( $post_type_items['all'] );
+}
+
+// Register menu items in the new WooCommerce navigation.
+add_action( 'admin_menu', 'register_navigation_items' );
+
 /**
  * Register the JS.
  */
@@ -26,14 +96,6 @@ function add_extension_register_script() {
 		$script_asset['dependencies'],
 		$script_asset['version'],
 		true
-	);
-
-	wp_register_style(
-		'dev-blog',
-		plugins_url( '/build/index.css', __FILE__ ),
-		// Add any dependencies styles may have, such as wp-components.
-		array(),
-		filemtime( dirname( __FILE__ ) . '/build/index.css' )
 	);
 
 	wp_enqueue_script( 'dev-blog' );

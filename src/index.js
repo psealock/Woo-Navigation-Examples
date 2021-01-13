@@ -1,4 +1,11 @@
-// Import SCSS entry file so that webpack picks up changes
-import './index.scss';
+/**
+ * External dependencies
+ */
+import { WooNavigationItem } from '@woocommerce/navigation';
+import { registerPlugin } from '@wordpress/plugins';
 
-console.log( 'hello world' );
+const MyExtenstionNavItem = () => (
+	<WooNavigationItem item="my-extension">Hello</WooNavigationItem>
+);
+
+registerPlugin( 'my-extension', { render: MyExtenstionNavItem } );
