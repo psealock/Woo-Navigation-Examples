@@ -1,15 +1,15 @@
-# dev-blog
+# WooCommerce Navigation Examples
 
-A WooCommerce Admin Extension
+Code samples found in https://woocommerce.wordpress.com/ can be found here as a fully functioning plugin.
 
-## Development
+## Getting Started
 
-To get started, run the following commands:
+1. Clone this repository in the plugins folder of your WooCommerce Wordpress install.
+2. cd into `Woo-Navigation-Examples` and run the following commands.
 
 ```text
 npm install
 npm start
 ```
 
-See [wp-scripts](https://github.com/WordPress/gutenberg/tree/master/packages/scripts) for more usage information.
-
+3. Activate this plugin.
