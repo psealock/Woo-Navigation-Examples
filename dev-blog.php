@@ -7,17 +7,20 @@
 
 use Automattic\WooCommerce\Admin\Features\Navigation\Menu;
 use Automattic\WooCommerce\Admin\Features\Navigation\Screen;
+use Automattic\WooCommerce\Admin\Features\Features;
 
 /**
  * Register the navigation items in the WooCommerce navigation.
  */
 function register_navigation_items() {
-	if (
-		! class_exists( '\Automattic\WooCommerce\Admin\Features\Navigation\Menu' ) ||
-		! class_exists( '\Automattic\WooCommerce\Admin\Features\Navigation\Screen' )
-	) {
-		return;
-	}
+if (
+	! method_exists( Screen::class, 'register_post_type' ) ||
+	! method_exists( Menu::class, 'add_plugin_item' ) ||
+	! method_exists( Menu::class, 'add_plugin_category' ) ||
+	! Features::is_enabled( 'navigation' ) 
+) {
+	return;
+}
 
 	function page_content(){
 		echo '<div class="wrap"><h2>Testing</h2></div>';
@@ -78,7 +81,7 @@ add_action( 'admin_menu', 'register_navigation_items' );
 /**
  * Register the JS.
  */
-function add_extension_register_script() {
+function add_extension_register_script_db() {
 	if ( ! class_exists( 'Automattic\WooCommerce\Admin\Loader' ) || ! \Automattic\WooCommerce\Admin\Loader::is_admin_or_embed_page() ) {
 		return;
 	}
@@ -102,4 +105,4 @@ function add_extension_register_script() {
 	wp_enqueue_style( 'dev-blog' );
 }
 
-add_action( 'admin_enqueue_scripts', 'add_extension_register_script' );
+add_action( 'admin_enqueue_scripts', 'add_extension_register_script_db' );
