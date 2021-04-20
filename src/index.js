@@ -8,4 +8,7 @@ const MyExtenstionNavItem = () => (
 	<WooNavigationItem item="my-extension">Hello</WooNavigationItem>
 );
 
-registerPlugin( 'my-extension', { render: MyExtenstionNavItem } );
+registerPlugin( 'my-extension', {
+	render: MyExtenstionNavItem,
+	scope: 'woocommerce-admin',
+} );
